@@ -3270,6 +3270,8 @@ function diagramToSVG(diagramString, alignmentHint) {
     function isPoint(c)            { return POINT_CHARACTERS.indexOf(c) + 1; }
     function isDecoration(c)       { return DECORATION_CHARACTERS.indexOf(c) + 1; }
     function isEmpty(c)            { return c === ' '; }
+    function isOddSolidDLine(c)    { return (c === '%') }
+    function isOddSolidBLine(c)    { return (c === '~') }
    
     ///////////////////////////////////////////////////////////////////////////////
     // Math library
@@ -3922,6 +3924,73 @@ function diagramToSVG(diagramString, alignmentHint) {
                         pathSet.insert(new Path(A, B));
                         // Continue the search from the end x+1,y+1
                     } // lineContains
+                }
+            }
+        } // i
+
+        const get_neighbors = (x,y) =>{
+            let res = []
+            for (let i = -1; i < 2; i++) {
+                for (let j = -1; j < 2; j++) {
+                    res.push(Vec2(x+i,y+j)) ;
+                }
+            }
+            // console.log(res)
+            return res;
+        }
+
+        // Find all solid NON 45 degree left-to-right downward diagonal lines (BACK DIAGONAL)
+        for (var i = -grid.height; i < grid.width; ++i) {
+            for (var x = i, y = grid.height - 1; y >= 0; --y, ++x) {
+                if (!grid.isUsed(x,y) && isOddSolidBLine(grid(x, y))) {
+                    // Begins a line...find the end
+                    var A = Vec2(x, y);
+                    A.x -= 1; A.y -= 1;
+                    do {
+                        let c = grid(x,y);
+                        let cv = Vec2(x,y);
+                        let rt = grid(x+1,y);
+                        let rtv = Vec2(x+1,y);
+                        let dn = grid(x,y+1);
+                        let dnv = Vec2(x,y+1);
+                        let dr = grid(x+1,y+1);
+                        let drv = Vec2(x+1,y+1);
+                        let neighbors = get_neighbors(x,y);
+                        neighbors.forEach(nv => {
+                            if (isOddSolidBLine(grid(nv.x,nv.y))){
+                                grid.setUsed(nv.x,nv.y);
+                            }
+                            
+                        });
+                        if (isOddSolidBLine(rt)) {
+                            ++x;
+                        }
+                        else if (isOddSolidBLine(dn))
+                            ++y;
+                        else if (isOddSolidBLine(dr)) {
+                            ++x;
+                            ++y;
+                        }
+                        else {
+                            break;
+                        }
+                    } while ( isOddSolidBLine(grid(x, y)));
+                    var B = Vec2(x, y);
+                    //Always
+                    B.x += 1; B.y += 1;
+
+                    // we may need to increment to corner of start and bottom of this
+                    pathSet.insert(new Path(A, B));
+                    //Don't think this is needed.
+                    // // Ensure that the entire line wasn't just vertices
+                    // if (lineContains(A, B, '~')) {
+                    //     for (var j = A.x; j <= B.x; ++j) {
+                    //         grid.setUsed(j, A.y + (j - A.x));
+                    //     }
+
+                    //     pathSet.insert(new Path(A, B));
+                    // Continue the search from the end x+1,y+1
+                    // } // lineContains
                 }
             }
         } // i
