@@ -1,0 +1,113 @@
+# Test markdeep
+
+## Does this heading work?
+
+#### Extra diag token
+
+Correctly working:
+[x] draw lines along connected path(just A to B)
+[ ] Handle connections for corners and vertexes
+[ ] Handle other shapes being close without overwriting
+[ ] Finalize token selection
+[x] Fork markdeep
+[ ] Migrate changes to legit branch (in new version number)
+[ ] Abstract out changes as much as possible for easy merging
+
+Determine an unused character and add to processing for diag lines
+
+The series or line would function similiar to existing diagonal lines but check i-1 and j-i.
+Similar to pathfinding for dynamic programming.
+
+
+*****************************************
+*                \     ~           \                      
+*                 v     ~~~         \                         
+*                  o      ~~~        \                 
+*                           ~~~       \         
+*                             ~      . \        
+*                                       
+*****************************************
+
+Example of very exagerated line horizontally
+
+**********************************************
+*                                                                               
+*  ````````   ````````                                                                          
+*  ````````          ``                                                                  
+*                                                                               
+*  ```      ````                                                                       
+*    ```       ````                                                                    
+*                                                                               
+*                                                                               
+*                                                                               
+**********************************************
+
+
+Test
+
+*****
+*%
+*%
+*%
+*%
+*%
+* %
+*****
+
+Example Test
+
+3 choices vs 1 -> left has 1/3 the slope as right
+
+***************************************************
+*                                                                       
+*                                                                       
+*      +-----------------------------------------+                                                                 
+*      |%%%bbb                                  /|                        
+*      |bbb%%%bbb                              / |                        
+*      |  bbb|%%%bbb                          /  |                        
+*      |     |bbb%%%bbb                      /   |                        
+*      |     |  bbbb%%%bbb                  /    |                        
+*      |     |     bbbb%%%bbb              /     |                        
+*      |     |        bbb|%%%bbb          /      |                        
+*      |     |           |bbb%%%bbbb     /       |                        
+*      |     |           |  bbbb%%%bbb  / test   |                        
+*      |test1|  test2    |    test3%%%b/         |                        
+*      +-----+-----------+------------+----------+                        
+*      |%%%%                                  ~  |                        
+*      |    %%%%           DECISION          ~~  |                        
+*      |    +   %%%%                        ~~   |                        
+*      |    |      .%%%%                   ~~    |                        
+*      |    |      |    %%%%              ~~     |                        
+*      |    |      |       .%%%%         ~~      |                        
+*      |    |      |       |    %%%%    ~~       |                        
+*      |c1  |  c2  |   c3  |   c4  |%%%%~  OTHER |                     
+*      +----+------+-------+-------+---+---------|                        
+*      |                   |                     |                        
+*      |                   |                     |                        
+*      +-----------------------------------------+                                                                 
+*                                                                       
+*                                                                       
+*                                                                       
+*                                                                       
+*                                                                       
+*                                                                       
+*                                                                       
+*                                                                       
+***************************************************
+
+Examples of very exagerrated vertical
+
+**********************************************
+*  %                                 /                                                                 
+*  % a%       ~~                 \\ /                                                                     
+*    a%                          \\\\                                                              
+*    a%%          %%%%%          \\\\\                                                           
+*    a%%                                                                  
+*    a%%        %%%%%%%                                                       
+*    aa%        |     %%%%%%%    |                                                            
+*    aa%        %%%%%%      |   |
+*                    %%%%%%%    |                                                            
+*                                                                               
+**********************************************
+
+<script src="./markdeep.js"></script>
